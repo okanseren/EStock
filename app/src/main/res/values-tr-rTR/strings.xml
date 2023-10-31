@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">EStock</string>
+
+    <string name="register_firstName">Ad</string>
+    <string name="register_lastName">Soyad</string>
+    <string name="register_email">Email</string>
+    <string name="register_password">Şifre</string>
+    <string name="register_button">Kayıt ol</string>
+    <string name="register_to_login_1">Bir hesabın var mı?</string>
+    <string name="register_to_login_2">Giriş yap</string>
+
+    <string name="login_email">Email</string>
+    <string name="login_password">Şifre</string>
+    <string name="login_button">Giriş yap</string>
+    <string name="login_to_register_1">Bir hesabın yok mu?</string>
+    <string name="login_to_register_2">Kayıt ol</string>
+
+</resources>
