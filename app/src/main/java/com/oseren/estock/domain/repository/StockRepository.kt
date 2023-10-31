@@ -17,7 +17,7 @@ interface StockRepository {
 
     fun querySearch(str : String) : Flow<Resource<List<StockData>>>
 
-    suspend fun setShoppingCartData(count: Int, ref: DocumentReference)
+    suspend fun setShoppingCartData(count: Int, ref: DocumentReference): Flow<Boolean>
 
     suspend fun getShoppingCart() : Flow<Resource<List<ShoppingCart>>>
 

@@ -1,10 +1,7 @@
 package com.oseren.estock.screen.shoppingcart
 
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.firebase.firestore.DocumentReference
 import com.oseren.estock.domain.model.Resource
 import com.oseren.estock.domain.model.ShoppingCart
 import com.oseren.estock.domain.repository.StockRepository
@@ -26,14 +23,6 @@ class ShoppingCartViewModel @Inject constructor(private val stockRepository: Sto
     private var _price : MutableStateFlow<Double> = MutableStateFlow(0.0)
     val price : StateFlow<Double> = _price.asStateFlow()
 
-    private val isLoadingMap = mutableMapOf<DocumentReference, MutableState<Boolean>>()
-
-    fun isLoadingForItem(ref: DocumentReference): MutableState<Boolean> {
-        return isLoadingMap.getOrPut(ref) { mutableStateOf(false) }
-    }
-
-
-
     init {
         viewModelScope.launch(Dispatchers.IO) {
             stockRepository.getShoppingCart().collect {
@@ -54,27 +43,6 @@ class ShoppingCartViewModel @Inject constructor(private val stockRepository: Sto
             }
         }
     }
-
-    private fun setShoppingCartData(count : Int, ref : DocumentReference) {
-        viewModelScope.launch(Dispatchers.IO) {
-            stockRepository.setShoppingCartData(count, ref)
-        }
-    }
-
-    suspend fun addToCart(ref: DocumentReference) {
-        isLoadingForItem(ref).value = true
-        setShoppingCartData(1, ref)
-        delay(1000)
-        isLoadingForItem(ref).value = false
-    }
-
-    suspend fun removeFromCart(ref: DocumentReference) {
-        isLoadingForItem(ref).value = true
-        setShoppingCartData(-1, ref)
-        delay(1000)
-        isLoadingForItem(ref).value = false
-    }
-
     private fun updateShoppingCart(docID: String,count: Int) {
         viewModelScope.launch(Dispatchers.IO) {
             stockRepository.updateShoppingCart(docID,count)

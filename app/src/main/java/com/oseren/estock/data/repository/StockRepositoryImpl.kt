@@ -4,8 +4,8 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.ktx.toObject
-import com.google.firebase.firestore.ktx.toObjects
+import com.google.firebase.firestore.toObject
+import com.google.firebase.firestore.toObjects
 import com.oseren.estock.domain.model.Category
 import com.oseren.estock.domain.model.Resource
 import com.oseren.estock.domain.model.ShoppingCart
@@ -124,8 +124,9 @@ class StockRepositoryImpl @Inject constructor(private val firestore: FirebaseFir
         }
     }
 
-    override suspend fun setShoppingCartData(count: Int, ref: DocumentReference) {
+    override suspend fun setShoppingCartData(count: Int, ref: DocumentReference): Flow<Boolean> = callbackFlow {
 
+        trySend(true)
         val aCount = if (count <= 0) 1 else 1
 
         val data = hashMapOf("count" to aCount
@@ -150,6 +151,7 @@ class StockRepositoryImpl @Inject constructor(private val firestore: FirebaseFir
                 shoppingCartRef
                     .add(data)
                     .await()
+                trySend(false)
 
             } else {
 
@@ -162,14 +164,19 @@ class StockRepositoryImpl @Inject constructor(private val firestore: FirebaseFir
                         .document(firstDoc.id)
                         .delete()
                         .await()
+                    trySend(false)
                 } else {
                     shoppingCartRef
                         .document(firstDoc.id)
                         .update("count", newCount)
                         .await()
+                    trySend(false)
                 }
 
             }
+        }
+        awaitClose {
+            close()
         }
     }
 

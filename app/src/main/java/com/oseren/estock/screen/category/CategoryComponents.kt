@@ -4,7 +4,6 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -51,7 +50,6 @@ fun CategoryCenteredTopBars(title: String
         })
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CategoryCard(state: Boolean
                  , count: Int
@@ -72,35 +70,33 @@ fun CategoryCard(state: Boolean
 
                 Surface(color = MaterialTheme.colorScheme.secondaryContainer
                     , modifier = Modifier
-                        .height(32.dp)
-                        .fillMaxWidth()
-                    , onClick = { if (!isLoading) addToCart.invoke() }) {
-                    Icon(painter = painterResource(id = R.drawable.plus24px)
-                        , contentDescription = ""
-                        , tint = MaterialTheme.colorScheme.onSecondaryContainer)
-                }
+                        .size(32.dp)
+                    , onClick = { if (!isLoading) addToCart.invoke() }
+                    , content = {
+                        Icon(painter = painterResource(id = R.drawable.plus24px)
+                            , contentDescription = ""
+                            , tint = MaterialTheme.colorScheme.onSecondaryContainer)
+                    })
                 AnimatedVisibility(visible = state) {
                     Column {
                         Surface(color = MaterialTheme.colorScheme.primaryContainer
                             , modifier = Modifier
-                                .height(32.dp)
-                                .fillMaxWidth()) {
+                                .size(32.dp)
+                            , content = {
+                                if (isLoading) {
+                                    CircularProgressIndicator()
+                                } else {
 
-                            if (isLoading) {
-                                CircularProgressIndicator(modifier = Modifier)
-                            } else {
-
-                                Text(text = count.toString()
-                                    , fontSize = 22.sp
-                                    , textAlign = TextAlign.Center
-                                    , color = MaterialTheme.colorScheme.onPrimaryContainer)
-                            }
-                        }
+                                    Text(text = count.toString()
+                                        , fontSize = 22.sp
+                                        , textAlign = TextAlign.Center
+                                        , color = MaterialTheme.colorScheme.onPrimaryContainer)
+                                }
+                            })
 
                         Surface(color = MaterialTheme.colorScheme.secondaryContainer
                             , modifier = Modifier
-                                .height(32.dp)
-                                .fillMaxWidth()
+                                .size(32.dp)
                             , onClick = { if (!isLoading) removeFromCart.invoke() }
                             , content = {
                                 Icon(painter = painterResource(id = R.drawable.minus24px)
@@ -109,47 +105,6 @@ fun CategoryCard(state: Boolean
                             })
                     }
                 }
-
-//                when(state) {
-//                    "extanded" -> {
-//                        Surface(color = MaterialTheme.colorScheme.secondaryContainer
-//                            , modifier = Modifier
-//                                .height(32.dp)
-//                                .fillMaxWidth()
-//                            , onClick = { if (!isLoading) addToCart.invoke() }) {
-//                            Icon(painter = painterResource(id = R.drawable.plus24px)
-//                                , contentDescription = ""
-//                                , tint = MaterialTheme.colorScheme.onSecondaryContainer)
-//                        }
-//
-//                        Surface(color = MaterialTheme.colorScheme.primaryContainer
-//                            , modifier = Modifier
-//                                .height(32.dp)
-//                                .fillMaxWidth()) {
-//
-//                            if (isLoading) {
-//                                CircularProgressIndicator()
-//                            } else {
-//
-//                                Text(text = count.toString()
-//                                    , fontSize = 22.sp
-//                                    , textAlign = TextAlign.Center
-//                                    , color = MaterialTheme.colorScheme.onPrimaryContainer)
-//                            }
-//                        }
-//
-//                        Surface(color = MaterialTheme.colorScheme.secondaryContainer
-//                            , modifier = Modifier
-//                                .height(32.dp)
-//                                .fillMaxWidth()
-//                            , onClick = { if (!isLoading) removeFromCart.invoke() }) {
-//                            Icon(painter = painterResource(id = R.drawable.minus24px)
-//                                , contentDescription = ""
-//                                , tint = MaterialTheme.colorScheme.onSecondaryContainer)
-//                        }
-//
-//                    }
-//                }
             }
         }
 

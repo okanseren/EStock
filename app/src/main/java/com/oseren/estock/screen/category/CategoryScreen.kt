@@ -13,7 +13,6 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -29,12 +28,11 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.oseren.estock.screen.home.shimmerEffect
-import com.oseren.estock.screen.shoppingcart.ShoppingCartViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun CategoryScreen(navController: NavController, category: String?) {
@@ -52,8 +50,6 @@ private fun CustomContent(category : String?
                           , categoryViewModel: CategoryViewModel = hiltViewModel()) {
 
     val categoryData = categoryViewModel.categoryData.value
-
-    val shoppingCartVM: ShoppingCartViewModel = hiltViewModel()
 
     LaunchedEffect(category) {
         CoroutineScope(Dispatchers.IO).launch {
@@ -75,7 +71,7 @@ private fun CustomContent(category : String?
 
                     val state = remember { mutableStateOf(false) }
                     var count by remember { mutableIntStateOf(1) }
-                    val isLoadingState = shoppingCartVM.isLoadingForItem(it.ref!!)
+                    val isLoadingState = categoryViewModel.isLoadingForItem(it.ref!!)
 
                     if(categoryData.isLoading) {
                         Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
@@ -87,23 +83,13 @@ private fun CustomContent(category : String?
                                 .clip(RoundedCornerShape(12.dp))
                                 .shimmerEffect())
 
-                            Box(modifier = Modifier
-                                .width(100.dp)
-                                .height(14.dp)
-                                .clip(RoundedCornerShape(12.dp))
-                                .shimmerEffect())
-
-                            Box(modifier = Modifier
-                                .width(100.dp)
-                                .height(14.dp)
-                                .clip(RoundedCornerShape(12.dp))
-                                .shimmerEffect())
-
-                            Box(modifier = Modifier
-                                .width(100.dp)
-                                .height(14.dp)
-                                .clip(RoundedCornerShape(12.dp))
-                                .shimmerEffect())
+                            repeat(3) {
+                                Box(modifier = Modifier
+                                    .width(100.dp)
+                                    .height(14.dp)
+                                    .clip(RoundedCornerShape(12.dp))
+                                    .shimmerEffect())
+                            }
                         }
                     } else {
                         CategoryCard(state = state.value,
@@ -114,20 +100,21 @@ private fun CustomContent(category : String?
                                 CoroutineScope(Dispatchers.Default).launch {
                                     if (!state.value) {
                                         state.value = true
-                                        shoppingCartVM.addToCart(it.ref!!)
+                                        categoryViewModel.addToCart(it.ref!!)
                                     } else {
                                         count++
-                                        shoppingCartVM.addToCart(it.ref!!)
+                                        categoryViewModel.addToCart(it.ref!!)
                                     }
                                 }
                             },
                             removeFromCart = {
                                 CoroutineScope(Dispatchers.Default).launch {
                                     if(count != 1) {
-                                        shoppingCartVM.removeFromCart(it.ref!!)
+                                        categoryViewModel.removeFromCart(it.ref!!)
                                         count--
                                     } else {
-                                        shoppingCartVM.removeFromCart(it.ref!!)
+                                        categoryViewModel.removeFromCart(it.ref!!)
+                                        delay(250)
                                         state.value = false
                                     }
                                 }

@@ -5,10 +5,12 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.firebase.firestore.DocumentReference
 import com.oseren.estock.domain.model.Resource
 import com.oseren.estock.domain.model.StockData
 import com.oseren.estock.domain.repository.StockRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -18,6 +20,8 @@ class CategoryViewModel @Inject constructor(private val stockRepository: StockRe
 
     private var _categoryData : MutableState<CategoryData> = mutableStateOf(CategoryData())
     val categoryData : State<CategoryData> = _categoryData
+
+    private val isLoadingMap = mutableMapOf<DocumentReference, MutableState<Boolean>>()
 
     fun getCategoryInside(category : String) {
         viewModelScope.launch {
@@ -37,6 +41,26 @@ class CategoryViewModel @Inject constructor(private val stockRepository: StockRe
                 }
             }
         }
+    }
+
+    fun isLoadingForItem(ref: DocumentReference): MutableState<Boolean> {
+        return isLoadingMap.getOrPut(ref) { mutableStateOf(false) }
+    }
+
+    private fun setShoppingCartData(count : Int, ref : DocumentReference) {
+        viewModelScope.launch(Dispatchers.IO) {
+            stockRepository.setShoppingCartData(count, ref).collect {
+                isLoadingForItem(ref).value = it
+            }
+        }
+    }
+
+    fun addToCart(ref: DocumentReference) {
+        setShoppingCartData(1, ref)
+    }
+
+    fun removeFromCart(ref: DocumentReference) {
+        setShoppingCartData(-1, ref)
     }
 }
 data class CategoryData(val data : List<StockData> = emptyList()

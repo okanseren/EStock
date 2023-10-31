@@ -201,15 +201,13 @@ fun HomePager(images: List<String>) {
                     val pageOffset = ((pagerState.currentPage - page)
                             + pagerState.currentPageOffsetFraction).absoluteValue
 
-                    alpha = lerp(
-                        start = 0.5f,
-                        stop = 1f,
-                        fraction = 1f - pageOffset.coerceIn(0f, 1f)
-                    )
+                    alpha = lerp(start = 0.5f
+                        , stop = 1f
+                        , fraction = 1f - pageOffset.coerceIn(0f, 1f))
 
-                    scaleY = lerp(
-                        start = 1f, stop = 0.85f, fraction = pageOffset.coerceIn(0f, 1f)
-                    )
+                    scaleY = lerp(start = 1f
+                        , stop = 0.85f
+                        , fraction = pageOffset.coerceIn(0f, 1f))
                 }) {
 
                 AsyncImage(model = images[page]
