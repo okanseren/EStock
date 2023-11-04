@@ -64,55 +64,6 @@ class LoginViewModel @Inject constructor(private val authRepository: AuthReposit
             }
         }
     }
-
-//    fun events(loginUIEvent: LoginUIEvent) {
-//        when(loginUIEvent) {
-//            is LoginUIEvent.EmailChanged -> {
-//                _loginData.value = loginData.value.copy(email = loginUIEvent.email)
-//            }
-//            LoginUIEvent.LoginButtonClicked -> {
-//                login()
-//            }
-//            is LoginUIEvent.PasswordChanged -> {
-//                _loginData.value = loginData.value.copy(password = loginUIEvent.password)
-//            }
-//        }
-//        validateWithRules()
-//    }
-//    private fun validateWithRules() {
-//        val emailResult = Validators.emailValidator(loginData.value.email)
-//        val passwordResult = Validators.passwordValidator(loginData.value.password)
-//
-//        _loginData.value = loginData.value.copy(emailError = emailResult.status
-//            , passwordError = passwordResult.status)
-//
-//        loginAllPassed.value = emailResult.status
-//                && passwordResult.status
-//    }
-
-//    private fun login() {
-//
-//        val email = loginData.value.email
-//        val password = loginData.value.password
-//
-//        //loginInProgress.value = true
-//
-//        viewModelScope.launch(Dispatchers.IO) {
-//            repository.loginUser(email, password).collect {
-//                when(it) {
-//                    is Resource.Failure -> {
-//
-//                    }
-//                    Resource.Loading -> {
-//
-//                    }
-//                    is Resource.Success -> {
-//                        ScreenRoute.changeRoute(Screen.HomeScreen)
-//                    }
-//                }
-//            }
-//        }
-//    }
 }
 
 data class LoginData(val email: String = ""

@@ -189,6 +189,7 @@ class StockRepositoryImpl @Inject constructor(private val firestore: FirebaseFir
                 .collection("shoppingCart")
 
             trySend(Resource.Loading)
+            delay(200)
 
             val listener = docRef.addSnapshotListener { snapshot, e ->
                 if (e != null) {

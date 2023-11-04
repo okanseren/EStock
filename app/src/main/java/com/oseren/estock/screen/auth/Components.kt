@@ -10,9 +10,10 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldDefaults
+import androidx.compose.material3.TextFieldDefaults.colors
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -71,7 +72,7 @@ fun InfoTextField(placeholder: String
         , singleLine = true
         , placeholder = { Text(text = placeholder) }
         , shape = RoundedCornerShape(50)
-        , colors = TextFieldDefaults.textFieldColors(unfocusedIndicatorColor = Color.Transparent
+        , colors = colors(unfocusedIndicatorColor = Color.Transparent
             , focusedIndicatorColor = Color.Transparent
             , disabledIndicatorColor = Color.Transparent
             , errorIndicatorColor = Color.Transparent)
@@ -82,7 +83,7 @@ fun InfoTextField(placeholder: String
         , isError = isError2
         , supportingText = {
             if (isError2) {
-                Text(text = "3 karakterden uzun olmalıdır"
+                Text(text = stringResource(id = R.string.auth_password_name)
                     , fontSize = 16.sp)
             }
         }
@@ -119,10 +120,11 @@ fun EmailTextField(placeholder: String
         , singleLine = true
         , placeholder = { Text(text = placeholder) }
         , shape = RoundedCornerShape(50)
-        , colors = TextFieldDefaults.textFieldColors(unfocusedIndicatorColor = Color.Transparent
-            , focusedIndicatorColor = Color.Transparent
-            , disabledIndicatorColor = Color.Transparent
-            , errorIndicatorColor = Color.Transparent)
+        , colors = colors(focusedIndicatorColor = Color.Transparent,
+            unfocusedIndicatorColor = Color.Transparent,
+            disabledIndicatorColor = Color.Transparent,
+            errorIndicatorColor = Color.Transparent,
+        )
         , leadingIcon = {
             Icon(painter = painter
                 , contentDescription = "")
@@ -130,7 +132,7 @@ fun EmailTextField(placeholder: String
         , isError = isError2
         , supportingText = {
             if (isError2) {
-                Text(text = "Geçersiz email syntaxı"
+                Text(text = stringResource(id = R.string.auth_email_error)
                     , fontSize = 16.sp)
             }
         }
@@ -180,7 +182,7 @@ fun PasswordTextField(placeholder: String
         , singleLine = true
         , placeholder = { Text(text = placeholder) }
         , shape = RoundedCornerShape(50)
-        , colors = TextFieldDefaults.textFieldColors(unfocusedIndicatorColor = Color.Transparent
+        , colors = colors(unfocusedIndicatorColor = Color.Transparent
             , focusedIndicatorColor = Color.Transparent
             , disabledIndicatorColor = Color.Transparent
             , errorIndicatorColor = Color.Transparent)
@@ -197,7 +199,7 @@ fun PasswordTextField(placeholder: String
         , isError = isError
         , supportingText = {
             if (isError) {
-                Text(text = "6 karakterden uzun olmalıdır"
+                Text(text = stringResource(id = R.string.auth_password_error)
                     , fontSize = 16.sp)
             }
         }
@@ -229,8 +231,13 @@ fun Register_to_login(navController: NavController) {
     val text2 = stringResource(id = R.string.register_to_login_2)
 
     val annotatedString = buildAnnotatedString {
-        append("$text1 ")
-        withStyle(style = SpanStyle(fontWeight = FontWeight.SemiBold)) {
+        withStyle(style = SpanStyle(color = MaterialTheme.colorScheme.onBackground)) {
+            pushStringAnnotation(tag = text1
+                , annotation = text1)
+            append("$text1 ")
+        }
+        withStyle(style = SpanStyle(fontWeight = FontWeight.SemiBold
+            , color = MaterialTheme.colorScheme.onBackground)) {
             pushStringAnnotation(tag = text2
                 , annotation = text2)
             append(text2)
@@ -259,8 +266,13 @@ fun Login_to_register(navController: NavController) {
     val text2 = stringResource(id = R.string.login_to_register_2)
 
     val annotatedString = buildAnnotatedString {
-        append("$text1 ")
-        withStyle(style = SpanStyle(fontWeight = FontWeight.SemiBold)) {
+        withStyle(style = SpanStyle(color = MaterialTheme.colorScheme.onBackground)) {
+            pushStringAnnotation(tag = text1
+                , annotation = text1)
+            append("$text1 ")
+        }
+        withStyle(style = SpanStyle(fontWeight = FontWeight.SemiBold
+            , color = MaterialTheme.colorScheme.onBackground)) {
             pushStringAnnotation(tag = text2
                 , annotation = text2)
             append(text2)

@@ -1,6 +1,10 @@
 <resources>
     <string name="app_name">EStock</string>
 
+    <string name="auth_email_error">Geçerli bir e-postayla tekrar deneyin</string>
+    <string name="auth_password_error">En az 6 karakter kullanın</string>
+    <string name="auth_password_name">En az 3 karakter kullanın</string>
+
     <string name="register_firstName">Ad</string>
     <string name="register_lastName">Soyad</string>
     <string name="register_email">Email</string>
@@ -14,4 +18,15 @@
     <string name="login_button">Giriş yap</string>
     <string name="login_to_register_1">Bir hesabın yok mu?</string>
     <string name="login_to_register_2">Kayıt ol</string>
+
+    <string name="home_category_title">Kategoriler</string>
+    <string name="home_drawer_shoppingcart">Sepetim</string>
+    <string name="home_drawer_logout">Çıkış Yap</string>
+
+    <string name="category_titles">Kategorisi</string>
+
+    <string name="search_bar_placeholder">Ürün arayın</string>
+
+    <string name="shopping_cart_title">Sepetim</string>
+    <string name="shopping_cart_confirm">Siparişi Onayla</string>
 </resources>

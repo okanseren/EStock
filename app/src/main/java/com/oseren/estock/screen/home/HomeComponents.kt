@@ -27,7 +27,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CardDefaults.cardColors
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -57,6 +57,7 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
@@ -68,7 +69,6 @@ import com.oseren.estock.R
 import com.oseren.estock.navigation.route.Routes
 import kotlin.math.absoluteValue
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeModalDrawer(firstName: String
                     , lastName: String
@@ -101,7 +101,7 @@ fun HomeModalDrawer(firstName: String
             Divider(modifier = Modifier.fillMaxWidth())
 
             Column {
-                NavigationDrawerItem(label = { Text(text = "Sepetim") }
+                NavigationDrawerItem(label = { Text(text = stringResource(id = R.string.home_drawer_shoppingcart)) }
                     , selected = false
                     , onClick = shoppingCartClick
                     , icon = {
@@ -113,7 +113,7 @@ fun HomeModalDrawer(firstName: String
 
             Column {
                 TextButton(onClick = logoutButton) {
-                    Text(text = "Çıkış yap")
+                    Text(text = stringResource(id = R.string.home_drawer_logout))
                 }
             }
         }
@@ -155,7 +155,7 @@ fun HomeSearchBar(onClick: () -> Unit) {
 
             Spacer(modifier = Modifier.width(16.dp))
 
-            Text(text = "Ürün arayın",
+            Text(text = stringResource(id = R.string.search_bar_placeholder),
                 fontSize = 18.sp)
             
         }
@@ -201,20 +201,25 @@ fun HomePager(images: List<String>) {
                     val pageOffset = ((pagerState.currentPage - page)
                             + pagerState.currentPageOffsetFraction).absoluteValue
 
-                    alpha = lerp(start = 0.5f
-                        , stop = 1f
-                        , fraction = 1f - pageOffset.coerceIn(0f, 1f))
+                    alpha = lerp(
+                        start = 0.5f, stop = 1f, fraction = 1f - pageOffset.coerceIn(0f, 1f)
+                    )
 
-                    scaleY = lerp(start = 1f
-                        , stop = 0.85f
-                        , fraction = pageOffset.coerceIn(0f, 1f))
+                    scaleY = lerp(
+                        start = 1f, stop = 0.85f, fraction = pageOffset.coerceIn(0f, 1f)
+                    )
                 }) {
 
                 AsyncImage(model = images[page]
                     , contentDescription = ""
                     , modifier = Modifier
                         .fillMaxWidth()
-                        .background(shimmerBrush(targetValue = 1300f, showShimmer = showShimmer.value))
+                        .background(
+                            shimmerBrush(
+                                targetValue = 1300f,
+                                showShimmer = showShimmer.value
+                            )
+                        )
                     , contentScale = ContentScale.Crop
                     , onSuccess = { showShimmer.value = false })
             }
@@ -259,7 +264,7 @@ fun CategoryContent(categoryData: ItemState
                  , navController: NavController) {
 
     Column {
-        Text(text = "Kategoriler"
+        Text(text = stringResource(id = R.string.home_category_title)
             , modifier = Modifier
                 .fillMaxWidth()
                 .padding(bottom = 12.dp)
@@ -296,7 +301,7 @@ fun CategoryCardDesign(categoryName: String
                        , categoryPhoto: String
                        , onClick: () -> Unit) {
 
-    Card(colors = CardDefaults.cardColors(MaterialTheme.colorScheme.secondaryContainer)
+    Card(colors = cardColors(MaterialTheme.colorScheme.secondaryContainer)
         , onClick = onClick
         , modifier = Modifier
             .size(height = 100.dp
@@ -310,8 +315,9 @@ fun CategoryCardDesign(categoryName: String
                     val colors =
                         listOf(Color.Black, Color.Black, Color.Transparent)
                     drawContent()
-                    drawRect(brush = Brush.verticalGradient(colors),
-                        blendMode = BlendMode.DstIn)
+                    drawRect(
+                        brush = Brush.verticalGradient(colors), blendMode = BlendMode.DstIn
+                    )
                 }
                 .size(100.dp, height = 70.dp)
             , contentScale = ContentScale.Crop)

@@ -1,6 +1,5 @@
 package com.oseren.estock.screen.auth.register
 
-import android.util.Log
 import android.util.Patterns
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
@@ -26,31 +25,24 @@ class RegisterViewModel @Inject constructor(private val authRepository: AuthRepo
 
     var registerAllPassed = mutableStateOf(false)
 
-
-    //private var job: Job? = null
-
     fun onFirstNameChange(firstName: String) {
         registerData.value = registerData.value.copy(firstName = firstName)
-        Log.d("Deneme","firstName: ${registerData.value.firstName}")
         buttonValidate()
     }
 
     fun onLastNameChange(lastName: String) {
         registerData.value = registerData.value.copy(lastName = lastName)
-        Log.d("Deneme","lastName: ${registerData.value.lastName}")
         buttonValidate()
     }
 
     fun onEmailChange(email: String) {
 
         registerData.value = registerData.value.copy(email = email)
-        Log.d("Deneme","email: ${registerData.value.email}")
         buttonValidate()
     }
 
     fun onPasswordChange(password: String) {
         registerData.value = registerData.value.copy(password = password)
-        Log.d("Deneme","password: ${registerData.value.password}")
         buttonValidate()
     }
 

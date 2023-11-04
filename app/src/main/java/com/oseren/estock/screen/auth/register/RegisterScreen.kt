@@ -1,7 +1,7 @@
 package com.oseren.estock.screen.auth.register
 
+import android.widget.Toast
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -11,12 +11,12 @@ import androidx.compose.foundation.relocation.BringIntoViewRequester
 import androidx.compose.foundation.relocation.bringIntoViewRequester
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -44,6 +44,7 @@ fun RegisterScreen(registerViewModel: RegisterViewModel = hiltViewModel()
     val scrollState = rememberScrollState()
     val coroutineScope = rememberCoroutineScope()
     val bringIntoViewRequester = BringIntoViewRequester()
+    val context = LocalContext.current
 
     LaunchedEffect(key1 = true) {
         registerViewModel.eventFlow.collectLatest { event ->
@@ -57,7 +58,7 @@ fun RegisterScreen(registerViewModel: RegisterViewModel = hiltViewModel()
                     }
                 }
                 is AuthUIEvents.SnackbarEvent -> {
-
+                    Toast.makeText(context,event.message, Toast.LENGTH_LONG).show()
                 }
             }
         }
@@ -66,10 +67,10 @@ fun RegisterScreen(registerViewModel: RegisterViewModel = hiltViewModel()
     Column(modifier = Modifier
         .fillMaxSize()
         .verticalScroll(scrollState)
-        .background(MaterialTheme.colorScheme.background)
-        .padding(
-            end = 18.dp, start = 18.dp, top = 36.dp, bottom = 36.dp
-        )) {
+        .padding(end = 12.dp
+            , start = 12.dp
+            , top = 24.dp
+            , bottom = 24.dp)) {
 
         InfoTextField(placeholder = stringResource(id = R.string.register_firstName)
             , painter = painterResource(id = R.drawable.person24px)

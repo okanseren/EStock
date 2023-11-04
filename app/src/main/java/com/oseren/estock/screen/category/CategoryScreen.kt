@@ -24,9 +24,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.oseren.estock.R
 import com.oseren.estock.screen.home.shimmerEffect
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -38,7 +40,7 @@ import kotlinx.coroutines.launch
 fun CategoryScreen(navController: NavController, category: String?) {
 
     Scaffold(topBar = {
-        CategoryCenteredTopBars(title = " $category Kategorisi"
+        CategoryCenteredTopBars(title = " $category ${stringResource(id = R.string.category_titles)}"
         , navigationClick = { navController.popBackStack() })
     }
         , content = { CustomContent(category) })

@@ -48,6 +48,7 @@ class AuthRepositoryImpl @Inject constructor(private val firebaseAuth: FirebaseA
                 }
             }
             .addOnFailureListener { exception ->
+                Log.d("AuthRepositoryImpl","${exception.message}")
                 trySend(Resource.Failure(exception))
             }
         awaitClose {

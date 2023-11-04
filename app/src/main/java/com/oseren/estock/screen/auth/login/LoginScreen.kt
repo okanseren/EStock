@@ -1,6 +1,6 @@
 package com.oseren.estock.screen.auth.login
 
-import androidx.compose.foundation.background
+import android.widget.Toast
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -8,10 +8,10 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -32,8 +32,7 @@ fun LoginScreen(loginViewModel: LoginViewModel = hiltViewModel()
                 , navController: NavController) {
 
     val scrollState = rememberScrollState()
-    //val coroutineScope = rememberCoroutineScope()
-    //val bringIntoViewRequester = BringIntoViewRequester()
+    val context = LocalContext.current
 
     LaunchedEffect(key1 = true) {
         loginViewModel.eventFlow.collectLatest { event ->
@@ -47,7 +46,7 @@ fun LoginScreen(loginViewModel: LoginViewModel = hiltViewModel()
                     }
                 }
                 is AuthUIEvents.SnackbarEvent -> {
-
+                    Toast.makeText(context,event.message, Toast.LENGTH_LONG).show()
                 }
             }
         }
@@ -56,11 +55,10 @@ fun LoginScreen(loginViewModel: LoginViewModel = hiltViewModel()
     Column(modifier = Modifier
         .fillMaxSize()
         .verticalScroll(scrollState)
-        .background(MaterialTheme.colorScheme.background)
-        .padding(end = 18.dp
-            , start = 18.dp
-            , top = 36.dp
-            , bottom = 36.dp)) {
+        .padding(end = 12.dp
+            , start = 12.dp
+            , top = 24.dp
+            , bottom = 24.dp)) {
 
         InfoTextField(placeholder = stringResource(id = R.string.login_email)
             , painter = painterResource(id = R.drawable.mail24px)

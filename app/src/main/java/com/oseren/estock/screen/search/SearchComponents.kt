@@ -16,15 +16,15 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuDefaults.textFieldColors
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextFieldDefaults
+import androidx.compose.material3.TextFieldDefaults.DecorationBox
+import androidx.compose.material3.TextFieldDefaults.contentPaddingWithoutLabel
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -36,6 +36,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
@@ -63,29 +64,32 @@ fun SearchTopAppBars(searchViewModel: SearchViewModel
             , textStyle = TextStyle(fontSize = 18.sp)
             , singleLine = true) {
 
-            TextFieldDefaults.TextFieldDecorationBox(value = searchText
-                , innerTextField = it
-                , singleLine = true
-                , enabled = true
-                , visualTransformation = VisualTransformation.None
-                , trailingIcon = {
+            DecorationBox(
+                value = searchText,
+                innerTextField = it,
+                enabled = true,
+                singleLine = true,
+                visualTransformation = VisualTransformation.None,
+                interactionSource = MutableInteractionSource(),
+                placeholder = {
+                    Text(text = stringResource(id = R.string.search_bar_placeholder)
+                        , fontSize = 18.sp)
+                },
+                trailingIcon = {
                     if (searchText.isNotEmpty()) {
                         IconButton(onClick = { searchViewModel.search("") }) {
-                            Icon(
-                                Icons.Default.Clear
-                                , contentDescription = "")
+                            Icon(painter = painterResource(id = R.drawable.close24px),
+                                contentDescription = "")
                         }
                     }
-                }
-                , placeholder = {
-                    Text(text = "Ürün arayın",
-                        fontSize = 18.sp,)
-                }
-                , interactionSource = MutableInteractionSource()
-                , contentPadding = TextFieldDefaults.textFieldWithoutLabelPadding(top = 0.dp, bottom = 0.dp)
-                , colors = TextFieldDefaults.textFieldColors(focusedIndicatorColor = Color.Transparent
-                    , unfocusedIndicatorColor = Color.Transparent
-                    , disabledIndicatorColor = Color.Transparent))
+                },
+                colors = textFieldColors(focusedIndicatorColor = Color.Transparent
+                    ,
+                    unfocusedIndicatorColor = Color.Transparent
+                    ,
+                    disabledIndicatorColor = Color.Transparent),
+                contentPadding = contentPaddingWithoutLabel(top = 0.dp
+                    , bottom = 0.dp,))
         }
     }
         , navigationIcon = {

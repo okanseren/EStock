@@ -1,5 +1,7 @@
 package com.oseren.estock.screen.shoppingcart
 
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.oseren.estock.domain.model.Resource
@@ -23,6 +25,8 @@ class ShoppingCartViewModel @Inject constructor(private val stockRepository: Sto
     private var _price : MutableStateFlow<Double> = MutableStateFlow(0.0)
     val price : StateFlow<Double> = _price.asStateFlow()
 
+    private val isLoadingMap = mutableMapOf<String, MutableState<Boolean>>()
+
     init {
         viewModelScope.launch(Dispatchers.IO) {
             stockRepository.getShoppingCart().collect {
@@ -35,13 +39,15 @@ class ShoppingCartViewModel @Inject constructor(private val stockRepository: Sto
                     }
                     is Resource.Success -> {
                         _shoppingCartData.value = Shopping(data = it.data)
-                        _shoppingCartData.value.data.forEach { each ->
-                            _price.emit(each.tp.totalPrice)
-                        }
+                        _shoppingCartData.value.data.forEach { each -> _price.emit(each.tp.totalPrice) }
                     }
                 }
             }
         }
+    }
+
+    fun isLoadingForItem(docID: String): MutableState<Boolean> {
+        return isLoadingMap.getOrPut(docID) { mutableStateOf(false) }
     }
     private fun updateShoppingCart(docID: String,count: Int) {
         viewModelScope.launch(Dispatchers.IO) {
@@ -49,12 +55,19 @@ class ShoppingCartViewModel @Inject constructor(private val stockRepository: Sto
         }
     }
 
-    fun increaseShoppingCartData(docID: String) {
+
+    suspend fun increaseShoppingCartData(docID: String) {
+        isLoadingForItem(docID).value = true
         updateShoppingCart(docID,1)
+        delay(1000)
+        isLoadingForItem(docID).value = false
     }
 
-    fun decreaseShoppingCartData(docID: String) {
+    suspend fun decreaseShoppingCartData(docID: String) {
+        isLoadingForItem(docID).value = true
         updateShoppingCart(docID,-1)
+        delay(1000)
+        isLoadingForItem(docID).value = false
     }
 
     fun deleteShoppingCartData(docID: String) {

@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -19,6 +18,7 @@ import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -32,12 +32,14 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.oseren.estock.R
+import com.oseren.estock.domain.model.ShoppingCart
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -80,7 +82,7 @@ fun ShoppingBottomBars(totalPrice: Double) {
                         .weight(5f)
                         , contentAlignment = Alignment.Center) {
 
-                        Text(text = "Siparişi Onayla"
+                        Text(text = stringResource(id = R.string.shopping_cart_confirm)
                             , fontSize = 18.sp
                             , color = MaterialTheme.colorScheme.onPrimaryContainer)
 
@@ -102,14 +104,10 @@ fun ShoppingBottomBars(totalPrice: Double) {
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ShoppingCartCardDesign(count: Int
-                     , name: String
-                     , photo: String
-                     , price: String
-                     , units: String
-                     , unitsValue: String
+                     , data : ShoppingCart
+                     , isLoading: Boolean
                      , increase: () -> Unit
                      , decrease: () -> Unit) {
 
@@ -120,7 +118,7 @@ fun ShoppingCartCardDesign(count: Int
         Card {
             AsyncImage(
                 model = ImageRequest.Builder(LocalContext.current)
-                    .data(photo)
+                    .data(data.stock.photo)
                     .crossfade(true)
                     .build(),
                 contentDescription = "",
@@ -132,9 +130,9 @@ fun ShoppingCartCardDesign(count: Int
         Spacer(modifier = Modifier.width(4.dp))
 
         Column(modifier = Modifier.weight(1f)) {
-            Text(text = name)
-            Text(text = price)
-            Text(text = "$unitsValue $units")
+            Text(text = data.stock.name)
+            Text(text = data.stock.price.toString())
+            Text(text = "${data.stock.unit_value} ${data.stock.units}")
         }
 
         Box(modifier = Modifier
@@ -145,9 +143,8 @@ fun ShoppingCartCardDesign(count: Int
             Row {
                 Surface(color = MaterialTheme.colorScheme.secondaryContainer
                     , modifier = Modifier
-                        .fillMaxHeight()
-                        .width(32.dp)
-                    , onClick = decrease) {
+                        .size(32.dp)
+                    , onClick = { if (!isLoading) decrease.invoke() }) {
                     Icon(painter = painterResource(id = R.drawable.minus24px)
                         , contentDescription = ""
                         , tint = MaterialTheme.colorScheme.onSecondaryContainer)
@@ -155,19 +152,22 @@ fun ShoppingCartCardDesign(count: Int
 
                 Surface(color = MaterialTheme.colorScheme.primaryContainer
                     , modifier = Modifier
-                        .fillMaxHeight()
-                        .width(32.dp)) {
-                    Text(text = count.toString()
-                        , fontSize = 22.sp
-                        , textAlign = TextAlign.Center
-                        , color = MaterialTheme.colorScheme.onPrimaryContainer)
+                        .size(32.dp)) {
+
+                    if (isLoading) {
+                        CircularProgressIndicator()
+                    } else {
+                        Text(text = count.toString()
+                            , fontSize = 22.sp
+                            , textAlign = TextAlign.Center
+                            , color = MaterialTheme.colorScheme.onPrimaryContainer)
+                    }
                 }
 
                 Surface(color = MaterialTheme.colorScheme.secondaryContainer
                     , modifier = Modifier
-                        .fillMaxHeight()
-                        .width(32.dp)
-                    , onClick = increase) {
+                        .size(32.dp)
+                    , onClick = { if (!isLoading) increase.invoke() }) {
                     Icon(painter = painterResource(id = R.drawable.plus24px)
                         , contentDescription = ""
                         , tint = MaterialTheme.colorScheme.onSecondaryContainer)
